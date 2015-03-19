@@ -22,7 +22,7 @@ DEPENDENCIES="
 
 BUGS_TO="florian.petran@gmail.com"
 
-DEFAULT_SRC_PREPARE_PATCHES=( -p0 "${FILES}/${PNV}-tags-lint.patch" )
+DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}/${PNV}-tags-lint.patch" )
 
 CMAKE_SRC_CONFIGURE_PARAMS=(
     "unicode -DSTRING_IMPL=ICU"
