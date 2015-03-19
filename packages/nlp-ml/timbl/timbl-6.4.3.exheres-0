@@ -23,7 +23,7 @@ DEPENDENCIES="
     build+run:
         dev-util/pkg-config
         dev-libs/libxml2
-        nlp/ticcutils
+        nlp-ml/ticcutils
 "
 
 src_install() {
