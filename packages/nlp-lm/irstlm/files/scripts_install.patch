@@ -1,0 +1,14 @@
+Source: written by Florian Petran
+Upstream: yes, bug number 3434524
+Reason: respect $(DESTDIR) setting
+--- a/scripts/Makefile.am	2011-09-09 20:47:44.000000000 +0200
++++ b/scripts/Makefile.am	2011-11-07 15:25:22.076918867 +0100
+@@ -7,7 +7,7 @@
+ 
+ install:
+ 	for p in $(sh_programs) $(perl_programs) ; do \
+-		cp $$p $(wrapperbindir) ;\
++		cp $$p $(DESTDIR)$(wrapperbindir) ;\
+ 	done
+ 
+ uninstall:

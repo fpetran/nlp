@@ -1,0 +1,32 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Memory-based tagger generator and tagger."
+HOMEPAGE="http://ilk.uvt.nl/mbt/"
+DOWNLOADS="
+    http://software.ticc.uvt.nl/${PNV}.tar.gz
+    doc? (
+        http://ilk.uvt.nl/downloads/pub/papers/Mbt_3.2_Manual.pdf
+        http://ilk.uvt.nl/downloads/pub/papers/wvlc96.pdf
+    )
+"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="doc"
+
+DEPENDENCIES="
+    build+run:
+        dev-util/pkg-config
+        dev-libs/libxml2
+        nlp-ml/timbl
+        nlp-ml/timblserver
+"
+
+src_install() {
+    default
+    option doc && dodoc "${FETCHEDDIR}"/Mbt_3.2_Manual.pdf \
+                        "${FETCHEDDIR}"/wvlc96.pdf
+}
+

@@ -1,0 +1,35 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Tilburg Memory-Based Learner"
+DESCRIPTION="
+An open source software package implementing several memory-based learning algorithms, among which IB1-IG, an implementation of k-nearest neighbor classification with feature weighting suitable for symbolic feature spaces, and IGTree, a decision-tree approximation of IB1-IG.
+"
+HOMEPAGE="http://ilk.uvt.nl/timbl/"
+DOWNLOADS="
+    http://software.ticc.uvt.nl/${PNV}.tar.gz
+    doc? (
+        http://ilk.uvt.nl/downloads/pub/papers/Timbl_6.3_API.pdf
+        http://ilk.uvt.nl/downloads/pub/papers/Timbl_6.3_Manual.pdf
+    )
+"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="doc"
+
+DEPENDENCIES="
+    build+run:
+        dev-util/pkg-config
+        dev-libs/libxml2
+        nlp/ticcutils
+"
+
+src_install() {
+    default
+    option doc && dodoc "${FETCHEDDIR}"/Timbl_6.3_API.pdf \
+                        "${FETCHEDDIR}"/Timbl_6.3_Manual.pdf
+}
+
+

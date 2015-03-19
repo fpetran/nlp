@@ -1,0 +1,29 @@
+# Copyright 2011 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [ project=mgizapp suffix=tar.gz ]
+
+SUMMARY="Multi-threaded word alignment tool based on GIZA++"
+HOMEPAGE="http://geek.kyloo.net/software/doku.php/mgiza:overview"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+        dev-libs/boost
+    build+run:
+        !nlp/giza-pp[mkcls] [[
+            description = [ both supply the mkcls binary ]
+            resolution = uninstall-blocked-after
+        ]]
+"
+
+WORK="${WORKBASE}"/${PN}
+
+src_configure() {
+    econf --hates=disable-dependency-tracking
+}
+

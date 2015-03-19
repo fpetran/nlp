@@ -1,0 +1,12 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Tools for the Tilburg ML software stack."
+HOMEPAGE="http://ilk.uvt.nl/software/"
+DOWNLOADS="http://software.ticc.uvt.nl/${PNV}.tar.gz"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+
+

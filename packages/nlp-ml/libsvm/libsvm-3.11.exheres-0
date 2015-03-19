@@ -1,0 +1,66 @@
+# Copyright 2011 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="A library for Support Vector Machines"
+HOMEPAGE="http://www.csie.ntu.edu.tw/~cjlin/libsvm/"
+DOWNLOADS="http://www.csie.ntu.edu.tw/~cjlin/${PN}/${PNV}.tar.gz"
+LICENCES="as-is"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    (
+        gtk
+        qt4
+    ) [[
+        number-selected = at-most-one
+    ]]
+    tools [[ description = [ install wrapper scripts for easier usage ] ]]
+"
+
+DEPENDENCIES="
+    build+run:
+        gtk? ( x11-libs/gtk+:= )
+        qt4? ( x11-libs/qt:= )
+    run:
+        tools? ( dev-lang/python:* )
+"
+
+src_compile() {
+    default
+    emake lib
+
+    if option qt4; then
+        edo pushd "${WORK}"/svm-toy/qt
+        edo sed -i "s%\(-lQtGui\)%-L/usr/${LIBDIR}/qt4 \1%" Makefile
+        emake
+        edo popd
+    fi
+
+    if option gtk; then
+        edo pushd "${WORK}"/svm-toy/gtk
+        emake
+        edo popd
+    fi
+}
+
+src_install() {
+    if option tools; then
+        edo cp tools/README README.tools
+        dodoc README.tools
+        dobin tools/*.py
+    fi
+
+    dodoc README FAQ.html
+
+    dobin svm-train svm-predict svm-scale
+
+    option qt4 && dobin "${WORK}"/svm-toy/qt/svm-toy
+    option gtk && dobin "${WORK}"/svm-toy/gtk/svm-toy
+
+    dolib libsvm.so.2
+    dosym libsvm.so.2 /usr/${LIBDIR}/libsvm.so
+
+    insinto /usr/include/svm
+    doins svm.h
+}
+

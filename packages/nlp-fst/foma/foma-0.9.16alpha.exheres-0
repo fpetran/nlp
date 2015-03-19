@@ -1,0 +1,39 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require googlecode [ suffix=tar.gz ]
+
+SUMMARY="Finite-state compiler and C library."
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build+run:
+        sys-libs/readline
+"
+
+WORK="${WORKBASE}/${PN}"
+
+src_prepare() {
+    default
+
+    MY_CFLAGS="${CFLAGS} -D_GNU_SOURCE -std=c99 -fvisibility=hidden -fPIC"
+
+    edo sed -i \
+            -e "s%^\(prefix =\).\+$%\1${IMAGE}/usr%" \
+            -e "s%\(libdir =.\+\)/lib$%\1/${LIBDIR}%" \
+            -e "s%^CC = gcc$%CC = ${CC}%" \
+            -e "s%^\(CFLAGS = \).\+$%\1${MY_CFLAGS}%" \
+            -e"s/-ltermcap//" \
+            Makefile
+}
+
+src_compile() {
+    emake libfoma
+    emake
+}
+
+

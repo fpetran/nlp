@@ -1,0 +1,40 @@
+Source: https://github.com/vchahun/fast_umorph/issues/1
+Upstream: Yes
+Reason: Fixes a bug when using OpenFST with C++11 enabled.
+--- src/include/fst/interval-set.h	2013-08-13 16:03:58.795343258 +0200
++++ src/include/fst/interval-set.h.new	2013-08-13 16:03:52.585331029 +0200
+@@ -218,7 +218,7 @@
+       interval.end = min(it1->end, it2->end);
+       ointervals->push_back(interval);
+       oset->count_ += interval.end - interval.begin;
+-      if (it1->end < it2->end)
++      if ( (it1->end) < (it2->end) )
+         ++it1;
+       else
+         ++it2;
+@@ -240,14 +240,14 @@
+        it != intervals_.end();
+        ++it) {
+     interval.end = min(it->begin, maxval);
+-    if (interval.begin < interval.end) {
++    if ( (interval.begin) < (interval.end) ) {
+       ointervals->push_back(interval);
+       oset->count_ += interval.end - interval.begin;
+     }
+     interval.begin = it->end;
+   }
+   interval.end = maxval;
+-  if (interval.begin < interval.end) {
++  if ( (interval.begin) < (interval.end) ) {
+     ointervals->push_back(interval);
+     oset->count_ += interval.end - interval.begin;
+   }
+@@ -348,7 +348,7 @@
+   while (it1 != intervals_.end() && it2 != intervals->end()) {
+     if (it1->end <= it2->begin) {  // no overlap - it1 first
+       ++it1;
+-    } else if (it2->begin < it1->begin || it2->end > it1->end) {  // no C
++    } else if ( (it2->begin) < (it1->begin) || (it2->end) > (it1->end) ) {  // no C
+       return false;
+     } else if (it2->end == it1->end) {
+       ++it1;

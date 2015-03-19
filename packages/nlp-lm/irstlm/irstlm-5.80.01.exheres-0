@@ -1,0 +1,22 @@
+# Copyright 2011 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require autotools [ supported_autoconf=[ 2.1 2.5 ] supported_automake=[ 1.10 1.11 ] ] sourceforge [ project=irstlm suffix=tgz ]
+
+SUMMARY="A tool for the estimation, representation, and computation of statistical language models."
+HOMEPAGE="http://hlt.fbk.eu/en/irstlm"
+
+LICENCES="LGPL-2.1"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+# includedir needs to be changed because of file clashes with
+# iniparser (dictionary.h)
+DEFAULT_SRC_CONFIGURE_PARAMS=( --includedir=/usr/include/${PN} )
+
+src_prepare() {
+    edo bash regenerate-makefiles.sh
+    default
+}
+

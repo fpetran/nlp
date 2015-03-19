@@ -1,0 +1,14 @@
+Source: written by Marcel Bollmann
+Reason: fix memleak when using arcpaths
+Upstream: Yes
+diff -rupN src/libgfsm/gfsmPaths.c src-2/libgfsm/gfsmPaths.c
+--- src/libgfsm/gfsmPaths.c	2013-06-27 10:21:36.000000000 +0200
++++ src/libgfsm/gfsmPaths.c	2014-06-23 14:10:14.291318805 +0200
+@@ -356,6 +356,7 @@ GSList *gfsm_automaton_arcpaths(gfsmAuto
+   }
+ 
+   //-- free all temporary nodes
++  g_slist_free(r_paths);
+   for (rpi=r_nodes; rpi != NULL; rpi=rpi->next) {
+     GSList *rpl = (GSList*)rpi->data;
+     g_slist_free_1(rpl);

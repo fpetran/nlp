@@ -1,0 +1,52 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+# partly based on wordnet-3.0-r2.ebuild, which is
+#       Copyright 1999-2010 Gentoo Foundation
+
+require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.11 ] ]
+
+SUMMARY="A lexical database for English"
+HOMEPAGE="http://wordnet.princeton.edu"
+DOWNLOADS="http://wordnetcode.princeton.edu/${PV}/${PNV}.tar.gz"
+LICENCES="Princeton"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="doc"
+
+DEPENDENCIES="
+    build+run:
+        dev-lang/tcl
+        dev-lang/tk
+"
+
+DEFAULT_SRC_INSTALL_EXTRA_DOCS=( AUTHORS ChangeLog INSTALL README )
+
+src_prepare() {
+    expatch "${FILES}/${PNV}-dict-location.patch"
+    expatch "${FILES}/${PNV}-docs-path.patch"
+    expatch "${FILES}/${PNV}-shared-lib.patch"
+
+    option doc || edo sed -i -e "s/SUBDIRS =.*/SUBDIRS = man/" doc/Makefile.am
+
+    edo sed -i "/^SUBDIRS/d" include/Makefile.am
+    edo sed -i "s: include/tk/Makefile::" configure.ac
+    edo rm -fr include/tk/
+
+    edo rm -f configure
+
+    eautoreconf
+
+}
+
+src_configure() {
+    PLATFORM=linux WN_ROOT="${TEMP}/usr" \
+        WN_DICTDIR="${TEMP}/usr/share/wordnet/dict" \
+        WN_MANDIR="${TEMP}/usr/share/man" \
+        WN_DOCDIR="${TEMP}/usr/share/doc/wordnet-${PV}" \
+        WNHOME="/usr/share/wordnet" \
+        econf \
+        --with-tcl="/usr/${LIBDIR}" \
+        --with-tk="/usr/${LIBDIR}" \
+        --hates=docdir
+}
+

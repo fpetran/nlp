@@ -1,0 +1,13 @@
+Source: written by M. Bollmann
+Reason: fix memleak
+Upstream: yes
+--- src/libgfsmxl/gfsmxlCascadeLookup.hi	2012-11-20 12:33:43.000000000 +0100
++++ src/libgfsmxl/gfsmxlCascadeLookup.hi	2014-06-23 14:01:36.151305538 +0200
+@@ -83,6 +83,7 @@ void gfsmxl_cascade_lookup_free(gfsmxlCa
+   gfsmxl_clc_fh_deleteheap(cl->heap);
+   g_hash_table_destroy(cl->configs);
+   gfsm_automaton_free(cl->otrie);
++  gfsm_slice_free(gfsmxlCascadeLookup, cl);
+ }
+ 
+ /*======================================================================

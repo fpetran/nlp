@@ -1,0 +1,36 @@
+# Copyright 2015 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [ suffix=tar.gz project=cwb pnv=${PNV}-source ]
+SUMMARY="A collection of tools for managing and querying large text corpora"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build+run:
+        sys-libs/ncurses
+"
+
+src_prepare() {
+    cat > config.mk <<-EOF
+		include \$(TOP)/config/platform/linux-64
+		include \$(TOP)/config/site/standard
+		PREFIX = ${IMAGE}/usr
+		LIBINSTDIR = \$(PREFIX)/${LIBDIR}
+		DEFAULT_REGISTRY = /usr/share/cwb/registry
+
+		CC = ${CC}
+		CFLAGS = ${CFLAGS}
+		LDFLAGS = -lm ${LDFLAGS}
+		include \$(TOP)/definitions.mk
+EOF
+}
+
+src_compile() {
+    emake depend
+    emake all
+}
+

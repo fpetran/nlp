@@ -1,0 +1,17 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [ suffix=tar.gz ]
+
+SUMMARY="A rule-based Parts-of-Speech Tagger."
+DESCRIPTION="
+An enhanced version of Eric Brill's rule-based Parts-of Speech Tagger,
+with built-in Tokenizer and Lemmatizer. It has been developed as OSS
+alternative for TreeTagger, and can be used as a drop-in substitute.
+"
+
+LICENCES="${PN}"
+SLOT="0"
+PLATFORMS="~amd64"
+
+

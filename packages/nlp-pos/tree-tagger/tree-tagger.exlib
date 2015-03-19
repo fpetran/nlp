@@ -1,0 +1,127 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+export_exlib_phases src_prepare src_install
+
+SUMMARY="A probabilistic Parts-of-Speech tagger."
+HOMEPAGE="http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/"
+
+DL_BASE="ftp://ftp.ims.uni-stuttgart.de/pub/corpora"
+DOWNLOADS="
+    ${DL_BASE}/${PN}-linux-${PV}.tar.gz
+
+    linguas:bg? (
+        ${DL_BASE}/bulgarian-par-linux-3.1.bin.gz
+    )
+    linguas:de? (
+        unicode? (
+            ${DL_BASE}/german-par-linux-3.2-utf8.bin.gz
+            ${DL_BASE}/german-chunker-par-linux-3.2-utf8.bin.gz
+        )
+        ${DL_BASE}/german-par-linux-3.2.bin.gz
+        ${DL_BASE}/german-chunker-par-linux-3.1.bin.gz
+    )
+    linguas:en? (
+        ${DL_BASE}/english-par-linux-3.2.bin.gz
+        ${DL_BASE}/english-chunker-par-linux-3.2.bin.gz
+    )
+    linguas:es? (
+        ${DL_BASE}/english-par-linux-3.2.bin.gz
+        ${DL_BASE}/english-chunker-par-linux-3.2.bin.gz
+    )
+    linguas:et? ( ${DL_BASE}/estonian-par-linux-3.2.bin.gz )
+    linguas:fr? (
+        unicode? (
+            ${DL_BASE}/french-par-linux-3.2-utf8.bin.gz
+            ${DL_BASE}/french-chunker-par-linux-3.2-utf8.bin.gz
+        )
+        ${DL_BASE}/french-par-linux-3.2.bin.gz
+        ${DL_BASE}/french-chunker-par-linux-3.1.bin.gz
+    )
+    linguas:it? (
+        unicode? (
+            ${DL_BASE}/italian-par-linux-3.2-utf8.bin.gz
+        )
+        ${DL_BASE}/italian-par-linux-3.1.bin.gz
+        ${DL_BASE}/italian-par2-linux-3.1.bin.gz \
+            -> italian2-par-linux-3.1.bin.gz
+    )
+    linguas:la? (
+        ${DL_BASE}/latin-par-linux-3.2.bin.gz
+    )
+    linguas:nl? (
+        ${DL_BASE}/dutch-par-linux-3.1.bin.gz
+        ${DL_BASE}/dutch2-par-linux-3.1.bin.gz
+    )
+    linguas:sw? (
+        ${DL_BASE}/swahili-par-linux-3.2.bin.gz
+    )
+
+"
+
+LICENCES="${PN}"
+SLOT="0"
+MYOPTIONS="
+    doc
+    unicode
+    linguas:
+        bg
+        de
+        en
+        es
+        et
+        fr
+        it
+        la
+        nl
+        sw [[ description = [ Swahili locale ] ]]
+"
+
+WORK="${WORKBASE}"
+
+tree-tagger_src_prepare() {
+    pushd "${WORK}"/cmd
+    # adapt paths in scripts
+    for script in *; do
+        sed -i \
+            -e "s%\(BIN=\).\+$%\1/usr/bin%" \
+            -e "s%\(CMD=\).\+$%\1/usr/bin%" \
+            -e "s%\(LIB=\).\+$%\1/usr/share/tree-tagger%" \
+            "${script}"
+    done
+    popd
+
+    # the sed stuff is needed because the parameter
+    # files ship with atrocious filenames
+    for parfile in *.bin; do
+        local newname
+        newname=$(echo "${parfile}" | sed \
+                -e"s/-linux-3..\(.\+\)\?.bin/\1/" \
+                -e"s/-par\(-utf8\)\?/\1.par/" \
+            )
+        mv "${parfile}" "${newname}"
+    done
+}
+
+tree-tagger_src_install() {
+    emagicdocs
+
+    option doc && dodoc doc/*
+
+    insinto /usr/share/${PN}
+    doins *.par
+
+    pushd "${WORK}"/bin
+    dobin tree-tagger train-tree-tagger separate-punctuation
+    popd
+
+    pushd "${WORK}"/cmd
+    dobin \
+        create-chunker-par-file \
+        create-pos-par-file \
+        make-chunk-lex.perl \
+        make-lex.perl
+    popd
+}
+
+

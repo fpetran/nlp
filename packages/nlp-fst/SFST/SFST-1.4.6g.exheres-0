@@ -1,0 +1,48 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Stuttgart Finite State Transducer Tools"
+HOMEPAGE="http://www.ims.uni-stuttgart.de/projekte/gramotron/SOFTWARE/SFST.html"
+DOWNLOADS="ftp://ftp.ims.uni-stuttgart.de/pub/corpora/SFST/${PNV}.tar.gz"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="doc"
+RESTRICT="test"
+
+DEPENDENCIES="
+    build+run:
+        sys-libs/readline
+"
+
+WORK="${WORKBASE}/${PN}/src"
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}/${PN}-Makefile.patch"
+)
+
+src_install() {
+    default
+    emake dynlibs
+}
+
+src_install() {
+    default
+
+    # pretty sure this isn't how it's supposed to work,
+    # but it's 9pm and i need to go home already
+    edo mkdir -p "${IMAGE}/usr/${LIBDIR}"
+
+    emake DESTDIR="${IMAGE}" libinstall
+    emake DESTDIR="${IMAGE}" maninstall
+
+    if $(option doc); then
+        pushd "${WORKBASE}/${PN}/doc"
+        dodoc SFST-Manual.pdf SFST-Tutorial.pdf
+        popd
+    fi
+
+}
+
+

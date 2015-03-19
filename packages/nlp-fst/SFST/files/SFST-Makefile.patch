@@ -1,0 +1,55 @@
+Source: written by Florian Petran
+Upstream: no
+Reason: this Makefile is a butcher job of a hack
+--- a/Makefile	2012-05-08 20:37:30.312006390 +0200
++++ b/Makefile	2012-05-08 20:58:45.474264830 +0200
+@@ -18,16 +18,14 @@
+ 
+ # Uncomment this line in order to compile a library and
+ # run "make clean" in order to force a recompilation of the object files
+-# FPIC = -fPIC
++FPIC = -fPIC
+ 
+-CXX = g++
+ WARNING = -Wall -Wcast-qual -Wconversion -std=c++98 -Wno-deprecated -ansi
+ 
+ ifeq ($(findstring CYGWIN,$(shell uname)),CYGWIN)
+ EXE = .exe
+ endif
+ 
+-CC = g++
+ CL = $(CC)
+ CFLAGS = -O3 $(WARNING) $(SGILIB) $(CDT) $(READLINE) $(FPIC)
+ LDFLAGS =
+@@ -39,14 +37,9 @@
+ INSTALL_MANPAGES = install -m 644
+ INSTALL_DIR = install -d -m 755
+ 
+-ifeq ($(findstring arwin, $(shell uname)),arwin)
+ INSTALL_LIBS = $(INSTALL)
+-else
+-INSTALL_LIBS = $(INSTALL) -s
+-endif
+ 
+-DESTDIR =
+-PREFIX = /usr/local/
++PREFIX = /usr/
+ 
+ PROGRAMS = fst-compiler$(EXE) fst-infl$(EXE) fst-generate$(EXE) fst-print$(EXE)\
+ 	fst-compare$(EXE) fst-compact$(EXE) fst-infl2$(EXE) fst-lowmem$(EXE)\
+@@ -154,12 +147,12 @@
+ libinstall: dynlib hfiles
+ 
+ dynlib:	$(DYNLIBS)
+-	$(INSTALL_LIBS) $^ $(PREFIX)lib
++	$(INSTALL_LIBS) $^ $(DESTDIR)$(PREFIX)$(LIBDIR)/
+ 	(ldconfig || true)
+ 
+ hfiles: alphabet.h basic.h fst.h interface.h mem.h sgi.h utf8.h
+-	-@if [ ! -d $(PREFIX)include/sfst ]; then mkdir -p $(PREFIX)include/sfst; fi
+-	$(INSTALL) $^ $(PREFIX)include/sfst
++	-@if [ ! -d $(DESTDIR)$(PREFIX)include/sfst ]; then mkdir -p $(DESTDIR)$(PREFIX)include/sfst; fi
++	$(INSTALL) $^ $(DESTDIR)$(PREFIX)include/sfst
+ 
+ 
+ # DO NOT DELETE

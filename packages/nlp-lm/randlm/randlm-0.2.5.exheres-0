@@ -1,0 +1,52 @@
+# Copyright 2011 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [ suffix=tar.gz ] autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.11 ] ]
+
+SUMMARY=""
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+    build+run:
+        dev-libs/boost[>=1.50]
+        dev-libs/sparsehash
+"
+
+BUGS_TO=""
+
+DEFAULT_SRC_CONFIGURE_PARAMS=( )
+DEFAULT_SRC_CONFIGURE_OPTION_WITHS=( )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=( )
+
+src_prepare() {
+    edo sed -i "s/boost_thread/boost_thread-mt -lboost_system/" src/RandLM/Makefile.am
+
+    # hadoop config shouldn't be included in default
+    edo sed -i "s/ hadoop//" Makefile.am
+
+    edo rm aclocal.m4
+    eaclocal
+
+    edo sed -i "s/boost_thread/boost_thread-mt -lboost_system/" src/RandLM/Makefile.in
+    edo sed -i "s#-L./#-L./ -L./.libs#" src/RandLM/Makefile.in
+}
+
+src_configure() {
+    LD="${CC}" econf
+}
+
+#src_install() {
+    #pushd bin
+    #dobin buildlm querylm
+    #popd
+
+    #pushd src
+    #dodoc README
+#}
+
+

@@ -1,0 +1,7 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require tree-tagger
+PLATFORMS="~amd64"
+
+

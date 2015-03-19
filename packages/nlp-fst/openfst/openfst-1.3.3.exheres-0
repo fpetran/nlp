@@ -1,0 +1,35 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="A library for weighted finite-state transducers."
+HOMEPAGE="http://www.openfst.org/"
+DOWNLOADS="http://www.openfst.org/twiki/pub/FST/FstDownload/${PNV}.tar.gz"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="
+    cli [[ description = [ Build fst::script and cli binaries ] ]]
+    compact [[ description = [ Enable CompactFst classes ] ]]
+    const [[ description = [ Enable ConstFst classes ] ]]
+    FAR [[ description = [ Build FST Archive extension ] ]]
+    lookahead [[ description = [ Enable LookAheadFst classes ] ]]
+    pdt [[ description = [ Build push-down transducer extensions ] ]]
+"
+
+DEPENDENCIES="
+    build:
+        sys-devel/gcc[>=4.1]
+"
+DEFAULT_SRC_PREPARE_PATCHES=( -p0 "${FILES}/interval-set.patch" )
+DEFAULT_SRC_CONFIGURE_PARAMS=( "--enable-static=no" )
+DEFAULT_SRC_CONFIGURE_OPTION_ENABLES=(
+    "compact compact-fsts"
+    "const const-fsts"
+    "lookahead lookahead-fsts"
+    "cli bin"
+    "FAR far"
+    pdt
+)
+
+

@@ -1,0 +1,28 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Server part of the Tilburg Memory based learner (TiMBL)."
+HOMEPAGE="http://ilk.uvt.nl/timbl/"
+DOWNLOADS="
+    http://software.ticc.uvt.nl/${PNV}.tar.gz
+    doc? ( http://ilk.uvt.nl/downloads/pub/papers/TimblServer_1.0_Manual.pdf )
+"
+
+LICENCES="GPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS="doc"
+
+DEPENDENCIES="
+    build+run:
+        dev-util/pkg-config
+        dev-libs/libxml2
+        nlp-ml/timbl
+"
+
+src_install() {
+    default
+    option doc && dodoc "${FETCHEDDIR}"/TimblServer_1.0_Manual.pdf
+}
+
+

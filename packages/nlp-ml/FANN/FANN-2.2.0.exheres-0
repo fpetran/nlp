@@ -1,0 +1,37 @@
+# Copyright 2012 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require sourceforge [ project=fann suffix=zip pnv=${PNV}-Source ] \
+        cmake [ api=2 ]
+
+SUMMARY="Fast Artificial Neural Network Library"
+DESCRIPTION="
+A free open source neural network library, which implements
+multilayer artificial neural networks in C with support for both
+fully connected and sparsely connected networks.
+"
+HOMEPAGE="http://leenissen.dk/fann/wp"
+
+LICENCES="LGPL-2.1"
+SLOT="0"
+PLATFORMS="~amd64"
+
+src_prepare() {
+    pushd "${WORKBASE}"
+    edo mv "${PNV}-Source" "${PNV}"
+    popd
+
+    default
+}
+
+src_install() {
+    default
+
+    if [[ ${LIBDIR} != lib ]]; then
+        pushd "${IMAGE}/usr/"
+        edo mv lib ${LIBDIR}
+        popd
+    fi
+}
+
+

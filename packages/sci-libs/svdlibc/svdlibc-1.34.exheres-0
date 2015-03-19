@@ -1,0 +1,31 @@
+# Copyright 2011 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="SVD library and command line tool"
+DESCRIPTION="
+Singular Value Decomposition for matrixes. Basically the svdpackc program, but with a sane interface.
+"
+HOMEPAGE="http://tedlab.mit.edu/~dr/SVDLIBC/"
+DOWNLOADS="http://tedlab.mit.edu/~dr/SVDLIBC/${PN}.tgz"
+
+LICENCES="unspecified"
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+WORK="${WORKBASE}"/SVDLIBC
+
+DEFAULT_SRC_COMPILE_PARAMS=( "HOSTTYPE=linux" )
+
+src_prepare() {
+    edo sed -i 's/gcc.\+$/gcc/' Makefile
+}
+
+src_install() {
+    dobin linux/svd
+    dolib linux/libsvd.a
+    dodoc Manual/*
+    insinto /usr/include
+    doins svdlib.h
+}
+
