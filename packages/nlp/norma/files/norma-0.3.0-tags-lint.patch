@@ -1,0 +1,37 @@
+From d1976db19f2da4331125d29b49c6175962061116 Mon Sep 17 00:00:00 2001
+From: Florian Petran <florian.petran@gmail.com>
+Date: Thu, 19 Mar 2015 18:29:15 +0100
+Subject: [PATCH] Make ctags and cpplint optional.
+
+---
+ CMakeLists.txt | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d2b604b..b690742 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,11 +11,18 @@ execute_process(
+ set(STRING_IMPL "ICU" CACHE STRING "String implementation to use (ICU|STD)")
+ set(DESTINATION "/usr/local/" CACHE STRING "Install destination")
+ set(USE_PYTHON OFF CACHE BOOL "Whether to make Python buildings/embed")
++set(USE_TAGS OFF CACHE BOOL "Whether to generate ctags/cscope in build")
++set(USE_LINT OFF CACHE BOOL "Whether to include a lint (code check) target")
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules")
+ include(AddSources)
+-include(cpplint)
+-include(CTAGS)
++
++if (USE_LINT)
++    include(cpplint)
++endif()
++if (USE_TAGS)
++    include(CTAGS)
++endif()
+ enable_testing()
+ 
+ find_package(Boost 1.50
+-- 
+2.3.3
+
