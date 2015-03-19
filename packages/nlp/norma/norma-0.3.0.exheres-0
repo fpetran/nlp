@@ -4,8 +4,6 @@
 require github [ user=fpetran tag=v${PV} ] cmake
 
 SUMMARY="A tool for automatic spelling normalization of non-standard language data."
-HOMEPAGE=""
-DOWNLOADS=""
 
 LICENCES="LGPL-3"
 SLOT="0"
