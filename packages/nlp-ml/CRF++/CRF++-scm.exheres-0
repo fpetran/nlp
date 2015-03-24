@@ -1,0 +1,18 @@
+# Copyright 2015 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=taku910 pn=crfpp ] autotools [ supported_autoconf=[ 2.6 ] supported_automake=[ 1.12 ] ]
+
+SUMMARY="Yet Another CRF toolkit"
+DESCRIPTION="
+A simple, customizable implementation of Conditional Random Fields
+(CRF) for segmenting/labeling sequential data. It can be applied
+to a variety of NLP tasks, such as Named Entity Recognition,
+Information Extraction and Text Chunking.
+"
+
+LICENCES="LGPL-3"
+SLOT="0"
+PLATFORMS="~amd64"
+
+
