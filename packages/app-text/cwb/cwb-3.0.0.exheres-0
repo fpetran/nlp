@@ -15,11 +15,19 @@ DEPENDENCIES="
 "
 
 src_prepare() {
+    edo sed \
+        -e"s%\sgcc\s% /usr/$(exhost --target)/bin/$(exhost --target)-gcc %" \
+        -e"s%\sar\s% /usr/$(exhost --target)/bin/$(exhost --target)-ar %" \
+        -e"s%\sranlib% /usr/$(exhost --target)/bin/$(exhost --target)-gcc-ranlib %" \
+        -i config/platform/unix
+    edo sed \
+        -e"s%\sar\s%\t/usr/$(exhost --target)/bin/$(exhost --target)-ar %" \
+        -i editline/Makefile.in
     cat > config.mk <<-EOF
 		include \$(TOP)/config/platform/linux-64
 		include \$(TOP)/config/site/standard
-		PREFIX = ${IMAGE}/usr
-		LIBINSTDIR = \$(PREFIX)/${LIBDIR}
+		PREFIX = ${IMAGE}/usr/$(exhost --target)
+		LIBINSTDIR = \$(PREFIX)/lib
 		DEFAULT_REGISTRY = /usr/share/cwb/registry
 
 		CC = ${CC}
@@ -32,5 +40,14 @@ EOF
 src_compile() {
     emake depend
     emake all
+}
+
+src_install() {
+    keepdir /usr/share/cwb/registry
+    default
+    edo pushd ${IMAGE}/usr/$(exhost --target)/share/man/man1
+    doman *
+    edo popd
+    edo rm -fr ${IMAGE}/usr/$(exhost --target)/share
 }
 
