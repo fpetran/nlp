@@ -16,12 +16,12 @@ DEPENDENCIES="
 
 src_prepare() {
     edo sed \
-        -e"s%\sgcc\s% /usr/$(exhost --target)/bin/$(exhost --target)-gcc %" \
-        -e"s%\sar\s% /usr/$(exhost --target)/bin/$(exhost --target)-ar %" \
-        -e"s%\sranlib% /usr/$(exhost --target)/bin/$(exhost --target)-gcc-ranlib %" \
+        -e"s%\sgcc\s% /usr/$(exhost --target)/bin/$(exhost --tool-prefix)gcc %" \
+        -e"s%\sar\s% /usr/$(exhost --target)/bin/$(exhost --tool-prefix)ar %" \
+        -e"s%\sranlib% /usr/$(exhost --target)/bin/$(exhost --tool-prefix)gcc-ranlib %" \
         -i config/platform/unix
     edo sed \
-        -e"s%\sar\s%\t/usr/$(exhost --target)/bin/$(exhost --target)-ar %" \
+        -e"s%\sar\s%\t/usr/$(exhost --target)/bin/$(exhost --tool-prefix)ar %" \
         -i editline/Makefile.in
     cat > config.mk <<-EOF
 		include \$(TOP)/config/platform/linux-64
@@ -38,8 +38,8 @@ EOF
 }
 
 src_compile() {
-    emake depend
-    emake all
+    emake -j1 depend
+    emake -j1 all
 }
 
 src_install() {
