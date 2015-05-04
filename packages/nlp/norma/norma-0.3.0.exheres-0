@@ -27,8 +27,16 @@ DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}/${PNV}-tags-lint.patch" )
 CMAKE_SRC_CONFIGURE_PARAMS=(
     "unicode -DSTRING_IMPL=ICU"
     "!unicode -DSTRING_IMPL=STD"
-    "-DDESTINATION=${IMAGE}/usr/"
     "python -DUSE_PYTHON"
 )
+
+CMAKE_SRC_CONFIGURE_OPTIONS_WITHS=( "python PYTHON" )
+
+src_configure() {
+    option unicode \
+        && CMAKE_SRC_CONFIGURE_PARAMS+=( '-DSTRING_IMPL=ICU' ) \
+        || CMAKE_SRC_CONFIGURE_PARAMS+=( '-DSTRING_IMPL=STD' )
+    cmake_src_configure
+}
 
 
