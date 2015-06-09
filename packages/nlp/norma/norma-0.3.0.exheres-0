@@ -24,13 +24,9 @@ BUGS_TO="florian.petran@gmail.com"
 
 DEFAULT_SRC_PREPARE_PATCHES=( "${FILES}/${PNV}-tags-lint.patch" )
 
-CMAKE_SRC_CONFIGURE_PARAMS=(
-    "unicode -DSTRING_IMPL=ICU"
-    "!unicode -DSTRING_IMPL=STD"
-    "python -DUSE_PYTHON"
-)
+CMAKE_SRC_CONFIGURE_PARAMS=( -DDESTINATION="/usr/$(exhost --target)" )
 
-CMAKE_SRC_CONFIGURE_OPTIONS_WITHS=( "python PYTHON" )
+CMAKE_SRC_CONFIGURE_OPTION_USES=( "python PYTHON" )
 
 src_configure() {
     option unicode \
