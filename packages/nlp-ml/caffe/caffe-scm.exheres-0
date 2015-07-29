@@ -1,0 +1,71 @@
+# Copyright 2015 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=BVLC ]
+SUMMARY="A deep learning framework"
+HOMEPAGE="http://caffe.berkeleyvision.org/"
+
+LICENCES=""
+SLOT="0"
+PLATFORMS="~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build:
+    build+run:
+        sci-libs/OpenBLAS
+        dev-libs/boost[>=1.55]
+        media-libs/opencv[>=2.4]
+        dev-libs/glog
+        dev-libs/gflags
+        dev-libs/protobuf
+        sci-libs/hdf5
+        dev-db/leveldb
+        app-arch/snappy
+        dev-db/lmdb
+"
+
+src_configure() {
+    edo cat <<-EOF > "${WORK}/Makefile.config"
+		CPU_ONLY := 1
+		CUSTOM_CXX := $(exhost --tool-prefix)g++
+		BLAS := open
+
+		BUILD_DIR := build
+	EOF
+    edo sed -i "s/ar rcs/\$(AR) rcs/" "${WORK}/Makefile"
+    default
+}
+
+src_test() {
+    emake test
+    emake runtest
+}
+
+src_install() {
+    edo pushd "${WORK}/build/lib"
+    dolib.a libcaffe.a
+    dolib.so libcaffe.so
+    edo popd
+    edo pushd "${WORK}/build/tools"
+    local binaries=(
+        caffe compute_image_mean convert_imageset device_query extract_features finetune_net \
+        net_speed_benchmark test_net train_net upgrade_net_proto_binary \
+        upgrade_net_proto_text )
+    local headers=(
+        blob.hpp common.hpp data_layers.hpp filler.hpp layer.hpp loss_layers.hpp neuron_layers.hpp \
+        solver.hpp vision_layers.hpp caffe.hpp common_layers.hpp data_transformer.hpp \
+        internal_thread.hpp layer_factory.hpp net.hpp python_layer.hpp syncedmem.hpp )
+    for b in "${binaries[@]}"; do
+        edo mv ${b}.bin ${b}
+        dobin ${b}
+    done
+    edo popd
+    edo pushd "${WORK}/include/caffe"
+    dodir "/usr/$(exhost --target)/include/caffe"
+    insinto "/usr/$(exhost --target)/include/caffe"
+    for h in "${headers[@]}"; do
+        doins ${h}
+    done
+}
+
