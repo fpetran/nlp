@@ -1,0 +1,23 @@
+# Copyright 2016 Florian Petran
+# Distributed under the terms of the GNU General Public License v2
+
+SUMMARY="Global Vectors for Word Representation"
+HOMEPAGE="http://nlp.stanford.edu/projects/glove/"
+DOWNLOADS="http://nlp.stanford.edu/software/${PNV}.zip"
+
+LICENCES="Apache-2.0"
+SLOT="0"
+PLATFORMS="~amd64"
+
+src_prepare() {
+    edo sed -i "/CC = gcc/D" Makefile
+}
+
+src_install() {
+    pushd build
+    dobin cooccur glove shuffle vocab_count
+    popd
+    dodoc README
+}
+
+
