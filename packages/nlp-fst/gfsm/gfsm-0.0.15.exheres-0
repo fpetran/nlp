@@ -1,11 +1,13 @@
-# Copyright 2013 Florian Petran
+# Copyright 2013-2016 Florian Petran 
 # Distributed under the terms of the GNU General Public License v2
 
 require autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.11 ] ]
 
-SUMMARY="GFSM extension library for lazy use."
+MY_PNV=${PNV}-1
+SUMMARY="Rudimentary finite-state utility library"
 HOMEPAGE="http://kaskade.dwds.de/~moocow/mirror/projects/gfsm/"
-DOWNLOADS="http://kaskade.dwds.de/~moocow/mirror/projects/gfsm/${PNV}.tar.gz"
+DOWNLOADS="http://kaskade.dwds.de/~moocow/mirror/projects/gfsm/${MY_PNV}.tar.gz"
+WORK=${WORKBASE}/${MY_PNV}
 
 LICENCES="LGPL-3"
 SLOT="0"
@@ -13,7 +15,6 @@ PLATFORMS="~amd64"
 
 DEPENDENCIES="
     build+run:
-        nlp-fst/gfsm[>0.0.10]
+        dev-libs/glib[>=2]
 "
-DEFAULT_SRC_PREPARE_PATCHES=( -p0 "${FILES}/${PNV}-memleak.patch")
 
